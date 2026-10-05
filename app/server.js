@@ -4,7 +4,12 @@ const moment = require('moment');
 const path = require('path');
 
 // Local settings for this machine. See config.example.json.
-const config = require('./config.json');
+let config = {};
+try {
+  config = require('./config.json');
+} catch (err) {
+  if (err.code !== 'MODULE_NOT_FOUND') throw err;
+}
 
 const PORT = process.env.PORT || config.port || 3000;
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN || config.adminToken;
@@ -83,6 +88,6 @@ app.post('/api/admin/reset', (req, res) => {
   res.json({ ok: true });
 });
 
-app.listen(3000, () => {
+app.listen(PORT, () => {
   console.log(`Taskboard running at http://localhost:${PORT}`);
 });
